@@ -54,7 +54,7 @@ graph_client.add_vertex({
 })
 
 graph_client.add_edge({
-    'label': 'selects',
+    'label': 'friend',
     'outV': out_v_id,
     'inV': in_v_id,
     'properties': {
