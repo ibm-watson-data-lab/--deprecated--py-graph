@@ -10,8 +10,6 @@ class IBMGraphClient(object):
         self.username = username
         self.password = password
         self.gds_token_auth = None
-        self.query_prefix = 'def g = graph.traversal(); '
-        self.basic_auth_header = 'Basic {}'.format(base64.b64encode('{}:{}'.format(self.username, self.password)))
         url = self.api_url
         index = self.api_url.find('://')
         if index > 0:
@@ -21,9 +19,10 @@ class IBMGraphClient(object):
         self.api_path_prefix = url[url.find('/'):]
 
     def init_session(self):
+        basic_auth_header = 'Basic {}'.format(base64.b64encode('{}:{}'.format(self.username, self.password)))
         conn = httplib.HTTPSConnection(self.base_url)
         conn.request("GET", '{}/_session'.format(self.base_path_prefix), headers={
-            'Authorization': self.basic_auth_header
+            'Authorization': basic_auth_header
         })
         response = conn.getresponse()
         data = response.read()
