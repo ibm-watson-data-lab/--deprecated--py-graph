@@ -2,6 +2,11 @@ import base64
 import httplib
 import json
 
+from .edge import Edge
+from .element import Element
+from .vertex import Vertex
+from .schema.schema import Schema
+
 
 class IBMGraphClient(object):
 
@@ -32,14 +37,14 @@ class IBMGraphClient(object):
 
     def get_schema(self):
         response = self.do_http_get('/schema')
-        return response['result']['data'][0]
+        return Schema.from_json_object(response['result']['data'][0])
 
     def save_schema(self, schema):
         path = '/schema'
         response = self.do_http_post(path, json.dumps(schema))
         data = response['result']['data']
         if len(data) > 0:
-            return data[0]
+            return Schema.from_json_object(data[0])
         else:
             return None
 
@@ -59,7 +64,7 @@ class IBMGraphClient(object):
         response = self.do_http_post(path, json.dumps(vertex))
         data = response['result']['data']
         if len(data) > 0:
-            return data[0]
+            return Vertex.from_json_object(data[0])
         else:
             return None
 
@@ -68,7 +73,7 @@ class IBMGraphClient(object):
         response = self.do_http_post(path, json.dumps(vertex))
         data = response['result']['data']
         if len(data) > 0:
-            return data[0]
+            return Vertex.from_json_object(data[0])
         else:
             return None
 
@@ -88,7 +93,7 @@ class IBMGraphClient(object):
         response = self.do_http_post(path, json.dumps(edge))
         data = response['result']['data']
         if len(data) > 0:
-            return data[0]
+            return Edge.from_json_object(data[0])
         else:
             return None
 
@@ -97,7 +102,7 @@ class IBMGraphClient(object):
         response = self.do_http_post(path, json.dumps(edge))
         data = response['result']['data']
         if len(data) > 0:
-            return data[0]
+            return Edge.from_json_object(data[0])
         else:
             return None
 
@@ -118,7 +123,13 @@ class IBMGraphClient(object):
             'gremlin': 'def g = graph.traversal(); {}'.format(query)
         }
         response = self.do_http_post(path, json.dumps(body))
-        return response['result']['data']
+        json_array = response['result']['data']
+        elements = []
+        if len(json_array) > 0:
+            for json_object in json_array:
+                elements.append(Element.from_json_object(json_object))
+        return elements
+
 
     # def bulkload_graphson(self):
     #     resp = self.do_http_post(
