@@ -80,16 +80,17 @@ schema = Schema(
     [VertexIndex('vertexByName', ['name'], True, True)],
     []
 )
+schema = graph_client.save_schema(schema)
 
-graph_client.save_schema(schema)
-
-graph_client.add_vertex(Vertex('person', {
+vertex = Vertex('person', {
     'name': 'John'
 })
+vertex = graph_client.add_vertex(vertex)
 
-graph_client.add_edge(Edge('friend', out_v_id, in_v_id, {
-    'date': d
+edge = Edge('friend', out_v_id, in_v_id, {
+   'date': d
 })
+edge = graph_client.add_edge(edge)
 ```
 
 Work in progress!
