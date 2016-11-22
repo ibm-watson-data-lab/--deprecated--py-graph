@@ -16,13 +16,13 @@ class Entity(Element):
         if property_name not in self.properties.keys():
             return None
         else:
-            o = self.properties[property_name]
-            if isinstance(o, list):
-                return list[0]['value']
-            elif isinstance(o, dict) and 'value' in o.keys():
-                return list['value']
+            prop = self.properties[property_name]
+            if isinstance(prop, list):
+                return prop[0]['value']
+            elif isinstance(prop, dict) and 'value' in prop.keys():
+                return prop['value']
             else:
-                return o
+                return prop
 
     def set_property_value(self, name, value):
         self.properties[name] = value

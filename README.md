@@ -20,7 +20,7 @@ git clone https://github.com/ibm-cds-labs/py-graph
 pip install -e <path_to_py_graph>
 ```
 
-# How to Run
+# How to Run (Dictionary API)
 
 ```
 from ibm_graph import IBMGraphClient
@@ -60,6 +60,35 @@ graph_client.add_edge({
     'properties': {
         'date': d
     }
+})
+```
+
+# How to Run (Object API)
+
+```
+from ibm_graph import IBMGraphClient
+
+api_url = 'https://ibmgraph-alpha.ng.bluemix.net/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/g'
+username = ''
+password = ''
+graph_client = IBMGraphClient(api_url, username, password)
+
+schema = Schema(
+    [PropertyKey('name', 'String', 'SINGLE')],
+    [VertexLabel('person')],
+    [EdgeLabel('friend')],
+    [VertexIndex('vertexByName', ['name'], True, True)],
+    []
+)
+
+graph_client.save_schema(schema)
+
+graph_client.add_vertex(Vertex('person', {
+    'name': 'John'
+})
+
+graph_client.add_edge(Edge('friend', out_v_id, in_v_id, {
+    'date': d
 })
 ```
 
