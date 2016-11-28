@@ -1,1 +1,2 @@
+pytest==3.0.4
 python-dotenv==0.5.1
