@@ -184,10 +184,10 @@ class IBMGraphClient(object):
         conn.close()
         return json.loads(data)
 
-    def do_http_post(self, path, body=None):
+    def do_http_post(self, path, body=''):
         return self.do_http_post_url('{}{}'.format(self.api_path_prefix, path), body)
         
-    def do_http_post_url(self, url, body=None):
+    def do_http_post_url(self, url, body=''):
         if self.gds_token_auth is None:
             self.init_session()
         conn = httplib.HTTPSConnection(self.base_url)
@@ -201,10 +201,10 @@ class IBMGraphClient(object):
         conn.close()
         return json.loads(data)
 
-    def do_http_put(self, path, body=None):
+    def do_http_put(self, path, body=''):
         return self.do_http_put_url('{}{}'.format(self.api_path_prefix, path), body)
 
-    def do_http_put_url(self, url, body=None):
+    def do_http_put_url(self, url, body=''):
         if self.gds_token_auth is None:
             self.init_session()
         conn = httplib.HTTPSConnection(self.base_url)
