@@ -35,6 +35,25 @@ class IBMGraphClient(object):
         self.gds_token_auth = 'gds-token {}'.format(token)
         conn.close()
 
+    # Graphs
+
+    def get_graphs(self):
+        response = self.do_http_get_url('{}/_graphs'.format(self.base_path_prefix))
+        return response['graphs']
+
+    def create_graph(self, graph_id=None):
+        url = '{}/_graphs'.format(self.base_path_prefix)
+        if graph_id is not None:
+            url += '/{}'.format(graph_id)
+        response = self.do_http_post_url(url)
+        return response['graphId']
+
+    def delete_graph(self, graph_id):
+        url = '{}/_graphs/{}'.format(self.base_path_prefix, graph_id)
+        self.do_http_delete_url(url)
+
+    # Schema
+    
     def get_schema(self):
         response = self.do_http_get('/schema')
         return Schema.from_json_object(response['result']['data'][0])
@@ -150,10 +169,13 @@ class IBMGraphClient(object):
     # HTTP Helper Methods
 
     def do_http_get(self, path):
+        return self.do_http_get_url('{}{}'.format(self.api_path_prefix, path))
+
+    def do_http_get_url(self, url):
         if self.gds_token_auth is None:
             self.init_session()
         conn = httplib.HTTPSConnection(self.base_url)
-        conn.request('GET', '{}{}'.format(self.api_path_prefix, path), headers={
+        conn.request('GET', url, headers={
             'Authorization': self.gds_token_auth,
             'Accept': 'application/json'
         })
@@ -162,11 +184,14 @@ class IBMGraphClient(object):
         conn.close()
         return json.loads(data)
 
-    def do_http_post(self, path, body):
+    def do_http_post(self, path, body=None):
+        return self.do_http_post_url('{}{}'.format(self.api_path_prefix, path), body)
+        
+    def do_http_post_url(self, url, body=None):
         if self.gds_token_auth is None:
             self.init_session()
         conn = httplib.HTTPSConnection(self.base_url)
-        conn.request('POST', '{}{}'.format(self.api_path_prefix, path), body, headers={
+        conn.request('POST', url, body, headers={
             'Authorization': self.gds_token_auth,
             'Content-Type': 'application/json',
             'Accept': 'application/json'
@@ -176,11 +201,14 @@ class IBMGraphClient(object):
         conn.close()
         return json.loads(data)
 
-    def do_http_put(self, path, body):
+    def do_http_put(self, path, body=None):
+        return self.do_http_put_url('{}{}'.format(self.api_path_prefix, path), body)
+
+    def do_http_put_url(self, url, body=None):
         if self.gds_token_auth is None:
             self.init_session()
         conn = httplib.HTTPSConnection(self.base_url)
-        conn.request('PUT', '{}{}'.format(self.api_path_prefix, path), body, headers={
+        conn.request('PUT', url, body, headers={
             'Authorization': self.gds_token_auth,
             'Content-Type': 'application/json',
             'Accept': 'application/json'
@@ -191,10 +219,13 @@ class IBMGraphClient(object):
         return json.loads(data)
 
     def do_http_delete(self, path):
+        return self.do_http_delete_url('{}{}'.format(self.api_path_prefix, path))
+
+    def do_http_delete_url(self, url):
         if self.gds_token_auth is None:
             self.init_session()
         conn = httplib.HTTPSConnection(self.base_url)
-        conn.request('POST', '{}{}'.format(self.api_path_prefix, path), headers={
+        conn.request('DELETE', url, headers={
             'Authorization': self.gds_token_auth,
             'Accept': 'application/json'
         })
