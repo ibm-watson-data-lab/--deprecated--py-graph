@@ -18,6 +18,7 @@ def test_create_graph():
     print "hello there"
     graph_ids = graph_client.get_graphs()
     print graph_ids
+    assert "g" in graph_ids
     #assert graph_id in graph_ids
     # delete graph
     #graph_client.delete_graph(graph_id)
