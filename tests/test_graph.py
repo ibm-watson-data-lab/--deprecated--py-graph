@@ -1,16 +1,4 @@
-import os
-
-from dotenv import load_dotenv
-from ibm_graph import IBMGraphClient
-
-
-def test_create_graph():
-    load_dotenv(os.path.join(os.path.dirname(__file__), ".env"))
-    graph_client = IBMGraphClient(
-        os.environ.get("TEST_API_URL"),
-        os.environ.get("TEST_USERNAME"),
-        os.environ.get("TEST_PASSWORD")
-    )
+def test_create_graph(graph_client):
     # create new graph
     graph_id = graph_client.create_graph()
     assert graph_id is not None

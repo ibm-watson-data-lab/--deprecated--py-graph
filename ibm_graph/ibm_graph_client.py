@@ -37,6 +37,16 @@ class IBMGraphClient(object):
 
     # Graphs
 
+    def set_graph(self, graph_id):
+        self.api_url = '{}/{}/{}'.format(self.base_url, self.base_path_prefix, graph_id)
+        url = self.api_url
+        index = self.api_url.find('://')
+        if index > 0:
+            url = self.api_url[self.api_url.find('://')+3:]
+        self.api_path_prefix = url[url.find('/'):]
+        print ('self.api_url = {}'.format(self.api_url))
+        print ('self.api_path_prefix = {}'.format(self.api_path_prefix))
+
     def get_graphs(self):
         response = self.do_http_get_url('{}/_graphs'.format(self.base_path_prefix))
         return response['graphs']
@@ -78,9 +88,24 @@ class IBMGraphClient(object):
 
     # Vertices
 
-    def add_vertex(self, vertex):
+    def get_vertex(self, vertex_id):
+        path = '/vertices/{}'.format(vertex_id)
+        response = self.do_http_get(path)
+        if 'result' in response.keys():
+            data = response['result']['data']
+            if len(data) > 0:
+                return Vertex.from_json_object(data[0])
+        elif 'code' in response.keys() and response['code'].lower() != 'notfounderror':
+            raise Exception(response['message'])
+        return None
+
+    def add_vertex(self, vertex=None):
         path = '/vertices'
-        response = self.do_http_post(path, json.dumps(vertex))
+        if vertex is None:
+            body = ''
+        else:
+            body = json.dumps(vertex)
+        response = self.do_http_post(path, body)
         data = response['result']['data']
         if len(data) > 0:
             return Vertex.from_json_object(data[0])
@@ -188,6 +213,7 @@ class IBMGraphClient(object):
         return self.do_http_post_url('{}{}'.format(self.api_path_prefix, path), body)
         
     def do_http_post_url(self, url, body=''):
+        print ('do_http_post_url -> {}'.format(url))
         if self.gds_token_auth is None:
             self.init_session()
         conn = httplib.HTTPSConnection(self.base_url)
