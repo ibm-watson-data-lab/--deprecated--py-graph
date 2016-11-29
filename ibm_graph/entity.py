@@ -12,17 +12,30 @@ class Entity(Element):
         self['label'] = label
         self['properties'] = properties
 
+    def set_id(self, id):
+        self.id = id
+        self['id'] = id
+
+    def set_properties(self, json_properties):
+        self.properties = {}
+        if json_properties is not None:
+            for key in json_properties.keys():
+                name = str(key)
+                o = json_properties[name]
+                if isinstance(o, list):
+                    value = o[0]['value']
+                elif isinstance(o, dict) and 'value' in o.keys():
+                    value = o['value']
+                else:
+                    value = o
+                self.set_property_value(name, value)
+        self['properties'] = self.properties
+
     def get_property_value(self, property_name):
-        if property_name not in self.properties.keys():
-            return None
+        if self.properties is not None and property_name in self.properties.keys():
+            return self.properties[property_name]
         else:
-            prop = self.properties[property_name]
-            if isinstance(prop, list):
-                return prop[0]['value']
-            elif isinstance(prop, dict) and 'value' in prop.keys():
-                return prop['value']
-            else:
-                return prop
+            return None
 
     def set_property_value(self, name, value):
         self.properties[name] = value

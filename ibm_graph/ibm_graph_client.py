@@ -44,8 +44,6 @@ class IBMGraphClient(object):
         if index > 0:
             url = self.api_url[self.api_url.find('://')+3:]
         self.api_path_prefix = url[url.find('/'):]
-        print ('self.api_url = {}'.format(self.api_url))
-        print ('self.api_path_prefix = {}'.format(self.api_path_prefix))
 
     def get_graphs(self):
         response = self.do_http_get_url('{}/_graphs'.format(self.base_path_prefix))
@@ -213,7 +211,6 @@ class IBMGraphClient(object):
         return self.do_http_post_url('{}{}'.format(self.api_path_prefix, path), body)
         
     def do_http_post_url(self, url, body=''):
-        print ('do_http_post_url -> {}'.format(url))
         if self.gds_token_auth is None:
             self.init_session()
         conn = httplib.HTTPSConnection(self.base_url)

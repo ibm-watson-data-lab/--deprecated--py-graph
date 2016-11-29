@@ -1,3 +1,7 @@
+import pytest
+
+
+@pytest.mark.usefixtures('graph_client')
 def test_create_graph(graph_client):
     # create new graph
     graph_id = graph_client.create_graph()

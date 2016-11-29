@@ -8,7 +8,7 @@ class Vertex(Entity):
 
     @staticmethod
     def from_json_object(json_object):
-        vertex = Vertex(json_object['label'], json_object['properties'])
-        vertex.id = json_object['id']
-        vertex['id'] = vertex.id
+        vertex = Vertex(json_object['label'])
+        vertex.set_id(json_object['id'])
+        vertex.set_properties(json_object['properties'])
         return vertex

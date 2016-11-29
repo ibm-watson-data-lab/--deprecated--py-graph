@@ -12,11 +12,11 @@ class Edge(Entity):
 
     @staticmethod
     def from_json_object(json_object):
-        edge = Edge(json_object['label'], json_object['outV'], json_object['inV'], json_object['properties'])
-        edge.id = json_object['id']
+        edge = Edge(json_object['label'], json_object['outV'], json_object['inV'])
+        edge.set_id(json_object['id'])
+        edge.set_properties(json_object['properties'])
         edge.out_v_label = json_object['outVLabel']
         edge.in_v_label = json_object['inVLabel']
-        edge['id'] = edge.id
         edge['outVLabel'] = edge.out_v_label
         edge['inVLabel'] = edge.in_v_label
         return edge
