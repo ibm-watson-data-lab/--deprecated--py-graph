@@ -9,8 +9,9 @@ class Entity(Element):
             self.properties = {}
         else:
             self.properties = properties
-        self['label'] = label
-        self['properties'] = properties
+        self['label'] = self.label
+        if len(self.properties) > 0:
+            self['properties'] = self.properties
 
     def set_id(self, id):
         self.id = id
@@ -29,7 +30,8 @@ class Entity(Element):
                 else:
                     value = o
                 self.set_property_value(name, value)
-        self['properties'] = self.properties
+        if len(self.properties) > 0:
+            self['properties'] = self.properties
 
     def get_property_value(self, property_name):
         if self.properties is not None and property_name in self.properties.keys():

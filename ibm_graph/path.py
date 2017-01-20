@@ -7,8 +7,8 @@ class Path(Element):
     def __init__(self, objects, labels):
         self.objects = objects
         self.labels = labels
-        self['objects'] = objects
-        self['labels'] = labels
+        self['objects'] = self.objects
+        self['labels'] = self.labels
 
     @staticmethod
     def from_json_object(json_object):
