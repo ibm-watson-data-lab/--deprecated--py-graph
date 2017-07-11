@@ -1,5 +1,7 @@
 # Experimental Python Client for IBM Graph
 
+:no_entry_sign: This project is no longer maintained.
+
 This is an Experimental Python library for working with IBM Graph.
 
 [![Build Status](https://travis-ci.org/ibm-cds-labs/py-graph.svg?branch=master)](https://travis-ci.org/ibm-cds-labs/py-graph)
